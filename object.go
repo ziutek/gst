@@ -24,14 +24,14 @@ func (o *GstObj) AsGstObj() *GstObj {
 }
 
 // Sets the name of object, or gives object a guaranteed unique name
-// if name is nil. Returns true if the name could be set.
+// if name is nil. Returns true if the name could be set. MT safe.
 func (o *GstObj) SetName(name string) bool {
 	s := C.CString(name)
 	defer C.free(unsafe.Pointer(s))
 	return C.gst_object_set_name(o.g(), (*C.gchar)(s)) != 0
 }
 
-
+// MT safe.
 func (o *GstObj) GetName() string {
 	s := C.gst_object_get_name(o.g())
 	if s == nil {
