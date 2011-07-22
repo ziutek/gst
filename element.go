@@ -20,6 +20,15 @@ const (
 	STATE_PLAYING      = State(C.GST_STATE_PLAYING)
 )
 
+type StateChangeReturn C.GstStateChangeReturn
+
+const (
+	STATE_CHANGE_FAILURE    = StateChangeReturn(C.GST_STATE_CHANGE_FAILURE)
+	STATE_CHANGE_SUCCESS    = StateChangeReturn(C.GST_STATE_CHANGE_SUCCESS)
+	STATE_CHANGE_ASYNC      = StateChangeReturn(C.GST_STATE_CHANGE_ASYNC)
+	STATE_CHANGE_NO_PREROLL = StateChangeReturn(C.GST_STATE_CHANGE_NO_PREROLL)
+)
+
 type Element struct {
 	GstObj
 }
@@ -71,4 +80,8 @@ func (e *Element) UnlinkPads(pad_name string, dst *Element, dst_pad_name string)
 	dst_pname := (*C.gchar)(C.CString(dst_pad_name))
 	defer C.free(unsafe.Pointer(dst_pname))
 	C.gst_element_unlink_pads(e.g(), src_pname, dst.g(), dst_pname)
+}
+
+func (e *Element) SetState(state State) StateChangeReturn {
+	return StateChangeReturn(C.gst_element_set_state(e.g(), C.GstState(state)))
 }
