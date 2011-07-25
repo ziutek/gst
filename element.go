@@ -8,6 +8,7 @@ import "C"
 
 import (
 	"unsafe"
+	"github.com/ziutek/glib"
 )
 
 type State C.GstState
@@ -41,17 +42,9 @@ func (e *Element) AsElement() *Element {
 	return e
 }
 
-func (e *Element) Link(dst *Element) bool {
-	return C.gst_element_link(e.g(), dst.g()) != 0
-}
-
-func (e *Element) Unlink(dst *Element) {
-	C.gst_element_unlink(e.g(), dst.g())
-}
-
-func (e *Element) LinkMany(next ...*Element) bool {
+func (e *Element) Link(next ...*Element) bool {
 	for _, dst := range next {
-		if !e.Link(dst) {
+		if C.gst_element_link(e.g(), dst.g()) == 0 {
 			return false
 		}
 		e = dst
@@ -59,9 +52,9 @@ func (e *Element) LinkMany(next ...*Element) bool {
 	return true
 }
 
-func (e *Element) UnlinkMany(next ...*Element) {
+func (e *Element) Unlink(next ...*Element) {
 	for _, dst := range next {
-		e.Unlink(dst)
+		C.gst_element_unlink(e.g(), dst.g())
 		e = dst
 	}
 }
@@ -84,4 +77,27 @@ func (e *Element) UnlinkPads(pad_name string, dst *Element, dst_pad_name string)
 
 func (e *Element) SetState(state State) StateChangeReturn {
 	return StateChangeReturn(C.gst_element_set_state(e.g(), C.GstState(state)))
+}
+
+func (e *Element) GetStaticPad(name string) *Pad {
+	s := (*C.gchar)(C.CString(name))
+	defer C.free(unsafe.Pointer(s))
+	cp := C.gst_element_get_static_pad(e.g(), s)
+	if cp == nil {
+		return nil
+	}
+	p := new(Pad)
+	p.Set(glib.Pointer(cp))
+	return p
+}
+
+// TODO: Move ElementFactoryMake to element_factory.go
+func ElementFactoryMake(factory_name, name string) *Element {
+	fn := (*C.gchar)(C.CString(factory_name))
+	defer C.free(unsafe.Pointer(fn))
+	n := (*C.gchar)(C.CString(name))
+	defer C.free(unsafe.Pointer(n))
+	e := new(Element)
+	e.Set(glib.Pointer(C.gst_element_factory_make(fn, n)))
+	return e
 }

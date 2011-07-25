@@ -7,7 +7,7 @@ package gst
 import "C"
 
 import (
-	"unsafe"
+	//"unsafe"
 	"github.com/ziutek/glib"
 )
 
@@ -25,32 +25,24 @@ func (b *Bin) AsBin() *Bin {
 
 func NewBin(name string) *Bin {
 	s := (*C.gchar)(C.CString(name))
-	defer C.free(unsafe.Pointer(s))
+	//defer C.free(unsafe.Pointer(s))
 	b := new(Bin)
 	b.Set(glib.Pointer(C.gst_bin_new(s)))
 	return b
 }
 
-func (b *Bin) Add(e *Element) bool {
-	return C.gst_bin_add(b.g(), e.g()) != 0
-}
-
-func (b *Bin) Remove(e *Element) bool {
-	return C.gst_bin_remove(b.g(), e.g()) != 0
-}
-
-func (b *Bin) AddMany(els ...*Element) bool {
+func (b *Bin) Add(els ...*Element) bool {
 	for _, e := range els {
-		if !b.Add(e) {
+		if C.gst_bin_add(b.g(), e.g()) == 0 {
 			return false
 		}
 	}
 	return true
 }
 
-func (b *Bin) RemoveMany(els ...*Element) bool {
+func (b *Bin) Remove(els ...*Element) bool {
 	for _, e := range els {
-		if !b.Remove(e) {
+		if C.gst_bin_remove(b.g(), e.g()) == 0 {
 			return false
 		}
 	}
