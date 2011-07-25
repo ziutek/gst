@@ -59,7 +59,9 @@ func (e *Element) Unlink(next ...*Element) {
 	}
 }
 
-
+func (e *Element) LinkFiltered(dst *Element, filter *Caps) bool {
+	return C.gst_element_link_filtered(e.g(), dst.g(), filter.g()) != 0
+}
 
 func (e *Element) LinkPads(pad_name string, dst *Element, dst_pad_name string) bool {
 	src_pname := (*C.gchar)(C.CString(pad_name))
