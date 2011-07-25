@@ -7,7 +7,7 @@ package gst
 import "C"
 
 import (
-	//"unsafe"
+	"unsafe"
 	"github.com/ziutek/glib"
 )
 
@@ -16,7 +16,7 @@ type Bin struct {
 }
 
 func (b *Bin) g() *C.GstBin {
-	return (*C.GstBin)(b.Pointer())
+	return (*C.GstBin)(b.GetPtr())
 }
 
 func (b *Bin) AsBin() *Bin {
@@ -25,9 +25,9 @@ func (b *Bin) AsBin() *Bin {
 
 func NewBin(name string) *Bin {
 	s := (*C.gchar)(C.CString(name))
-	//defer C.free(unsafe.Pointer(s))
+	defer C.free(unsafe.Pointer(s))
 	b := new(Bin)
-	b.Set(glib.Pointer(C.gst_bin_new(s)))
+	b.SetPtr(glib.Pointer(C.gst_bin_new(s)))
 	return b
 }
 

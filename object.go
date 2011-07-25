@@ -16,15 +16,15 @@ type GstObj struct {
 }
 
 func (o *GstObj) g() *C.GstObject {
-	return (*C.GstObject)(o.Pointer())
+	return (*C.GstObject)(o.GetPtr())
 }
 
 func (o *GstObj) AsGstObj() *GstObj {
 	return o
 }
 
-// Sets the name of object, or gives object a guaranteed unique name
-// if name is nil. Returns true if the name could be set. MT safe.
+// Sets the name of object.
+// Returns true if the name could be set. MT safe.
 func (o *GstObj) SetName(name string) bool {
 	s := C.CString(name)
 	defer C.free(unsafe.Pointer(s))
@@ -51,7 +51,7 @@ func (o *GstObj) SetParent(p *GstObj) bool {
 // should Unref it after usage.
 func (o *GstObj) GetParent() *GstObj {
 	p := new(GstObj)
-	p.Set(glib.Pointer(C.gst_object_get_parent(o.g())))
+	p.SetPtr(glib.Pointer(C.gst_object_get_parent(o.g())))
 	return p
 }
 

@@ -1,6 +1,6 @@
 include $(GOROOT)/src/Make.inc
 
 TARG = github.com/ziutek/gst
-CGOFILES = functions.go object.go element.go bin.go pipeline.go clock.go pad.go
+CGOFILES = common.go object.go element.go bin.go pipeline.go clock.go pad.go caps.go structure.go
 
 include $(GOROOT)/src/Make.pkg

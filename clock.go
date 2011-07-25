@@ -10,7 +10,7 @@ type Clock struct {
 }
 
 func (c *Clock) g() *C.GstClock {
-	return (*C.GstClock)(c.Pointer())
+	return (*C.GstClock)(c.GetPtr())
 }
 
 func (c *Clock) AsClock() *Clock {

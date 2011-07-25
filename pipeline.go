@@ -16,7 +16,7 @@ type Pipeline struct {
 }
 
 func (p *Pipeline) g() *C.GstPipeline {
-	return (*C.GstPipeline)(p.Pointer())
+	return (*C.GstPipeline)(p.GetPtr())
 }
 
 func (p *Pipeline) AsPipeline() *Pipeline {
@@ -27,6 +27,6 @@ func NewPipeline(name string) *Pipeline {
 	s := (*C.gchar)(C.CString(name))
 	defer C.free(unsafe.Pointer(s))
 	p := new(Pipeline)
-	p.Set(glib.Pointer(C.gst_pipeline_new(s)))
+	p.SetPtr(glib.Pointer(C.gst_pipeline_new(s)))
 	return p
 }

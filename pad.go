@@ -30,7 +30,7 @@ type Pad struct {
 }
 
 func (p *Pad) g() *C.GstPad {
-	return (*C.GstPad)(p.Pointer())
+	return (*C.GstPad)(p.GetPtr())
 }
 
 func (p *Pad) AsPad() *Pad {

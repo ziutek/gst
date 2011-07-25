@@ -35,7 +35,7 @@ type Element struct {
 }
 
 func (e *Element) g() *C.GstElement {
-	return (*C.GstElement)(e.Pointer())
+	return (*C.GstElement)(e.GetPtr())
 }
 
 func (e *Element) AsElement() *Element {
@@ -58,6 +58,8 @@ func (e *Element) Unlink(next ...*Element) {
 		e = dst
 	}
 }
+
+
 
 func (e *Element) LinkPads(pad_name string, dst *Element, dst_pad_name string) bool {
 	src_pname := (*C.gchar)(C.CString(pad_name))
@@ -87,7 +89,7 @@ func (e *Element) GetStaticPad(name string) *Pad {
 		return nil
 	}
 	p := new(Pad)
-	p.Set(glib.Pointer(cp))
+	p.SetPtr(glib.Pointer(cp))
 	return p
 }
 
@@ -98,6 +100,6 @@ func ElementFactoryMake(factory_name, name string) *Element {
 	n := (*C.gchar)(C.CString(name))
 	defer C.free(unsafe.Pointer(n))
 	e := new(Element)
-	e.Set(glib.Pointer(C.gst_element_factory_make(fn, n)))
+	e.SetPtr(glib.Pointer(C.gst_element_factory_make(fn, n)))
 	return e
 }
