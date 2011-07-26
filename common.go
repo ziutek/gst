@@ -1,4 +1,4 @@
-// Binding for GStreamer API
+// Bindings for GStreamer API
 package gst
 
 /*
