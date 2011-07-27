@@ -1,6 +1,6 @@
 include $(GOROOT)/src/Make.inc
 
-ALL=simple dynamic_pads
+ALL=simple dynamic_pads live_webm
 
 all: $(ALL)
 

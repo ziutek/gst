@@ -35,7 +35,7 @@ func (f Fourcc) Type() glib.Type {
 }
 
 func (f Fourcc) Value() *glib.Value {
-	v := new(glib.Value)
+	v := glib.NewValue(f.Type())
 	C.gst_value_set_fourcc(v2g(v), C.guint32(f))
 	return v
 }
@@ -73,7 +73,7 @@ func (r *IntRange) Type() glib.Type {
 }
 
 func (r *IntRange) Value() *glib.Value {
-	v := new(glib.Value)
+	v := glib.NewValue(r.Type())
 	C.gst_value_set_int_range(v2g(v), C.gint(r.Start), C.gint(r.End))
 	return v
 }
@@ -98,7 +98,7 @@ func (f *Fraction) Type() glib.Type {
 }
 
 func (f *Fraction) Value() *glib.Value {
-	v := new(glib.Value)
+	v := glib.NewValue(f.Type())
 	C.gst_value_set_fraction(v2g(v), C.gint(f.Numer), C.gint(f.Denom))
 	return v
 }
