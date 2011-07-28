@@ -81,9 +81,10 @@ func (wm *WebM) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 	}
 	file.Close()
 
+	// Save connection in map (workaround)
 	wm.conns[fd] = conn
 
-	// Pass fd to multifdsink
+	// Pass fd to the multifdsink
 	wm.sink.Emit("add", fd)
 }
 
@@ -94,7 +95,7 @@ func (wm *WebM) cbClientFdRemoved(fd int) {
 	wm.conns[fd] = nil, false
 }
 
-func NewWebM(width, height int) *WebM {
+func NewWebM(width, height, fps int) *WebM {
 	wm := new(WebM)
 	wm.conns = make(map[int]net.Conn)
 
@@ -120,7 +121,7 @@ func NewWebM(width, height int) *WebM {
 		glib.Params{
 			"width":     width,
 			"height":    height,
-			"framerate": &gst.Fraction{25, 1},
+			"framerate": &gst.Fraction{fps, 1},
 		},
 	)
 	src.LinkFiltered(enc, filter)
@@ -133,7 +134,7 @@ func NewWebM(width, height int) *WebM {
 
 func main() {
 	index := &Index{384, 216}
-	wm := NewWebM(index.width, index.height)
+	wm := NewWebM(index.width, index.height, 25)
 	wm.Play()
 
 	http.Handle("/", index)
