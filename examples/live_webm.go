@@ -25,7 +25,9 @@ func (ix *Index) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 			<title>Live WebM video</title>
 		</head>
 		<body>
-			<video src='/video' width=%d height=%d autoplay></video>
+			<img src='/images/logo.png' alt=logo1><br>
+			<video src='/video' width=%d height=%d autoplay></video><br>
+			<img src='/images/logo-153x55.png' alt=logo2>
 		</body>
 	</html>`
 
@@ -132,6 +134,10 @@ func NewWebM(width, height, fps int) *WebM {
 	return wm
 }
 
+func staticHandler(wr http.ResponseWriter, req *http.Request) {
+	http.ServeFile(wr, req, req.URL.Path[1:])
+}
+
 func main() {
 	index := &Index{384, 216}
 	wm := NewWebM(index.width, index.height, 25)
@@ -139,6 +145,7 @@ func main() {
 
 	http.Handle("/", index)
 	http.Handle("/video", wm)
+	http.HandleFunc("/images/", staticHandler)
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatalln("http.ListenAndServe:", err)
