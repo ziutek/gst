@@ -74,7 +74,6 @@ func (wm *WebM) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 	_, err = io.WriteString(
 		file,
 		"HTTP/1.1 200 OK\r\n" +
-		"Transfer-Encoding: identity\r\n" +
 		"Content-Type: video/webm\r\n\r\n",
 	)
 	if err != nil {
