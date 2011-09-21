@@ -117,7 +117,11 @@ func NewPlayer() *Player {
 	return p
 }
 
-func main() {
-	NewPlayer()
+func (p *Player) Run() {
 	gtk.Main()
+}
+
+
+func main() {
+	NewPlayer().Run()
 }
