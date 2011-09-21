@@ -11,7 +11,6 @@ type Player struct {
 	bus        *gst.Bus
 	window     *gtk.Window
 	movie_area *gtk.DrawingArea
-	load_file  *gtk.FileChooser
 	file_path  string
 	xid        uint
 }
@@ -85,7 +84,6 @@ func NewPlayer() *Player {
 		gtk.FILE_CHOOSER_ACTION_OPEN,
 	)
 	fcb.Connect("selection-changed", (*Player).onFileSelected, p)
-	p.load_file = gtk.FileChooserCast(fcb.AsWidget())
 	hbox.Add(fcb.AsWidget())
 
 	button := gtk.NewButtonFromStock("gtk-media-play")
