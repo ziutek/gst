@@ -68,3 +68,14 @@ func (o *GstObj) GetPathString() string {
 	defer C.g_free(C.gpointer(s))
 	return C.GoString((*C.char)(s))
 }
+
+func (o *GstObj) ImplementsInterfaceCheck(typ glib.Type) bool {
+	return C.gst_implements_interface_check(C.gpointer(o.GetPtr()),
+		C.GType(typ)) != 0
+}
+
+func (o *GstObj) ImplementsInterfaceCast(typ glib.Type) glib.Pointer {
+	return glib.Pointer(C.gst_implements_interface_cast(C.gpointer(o.GetPtr()),
+		C.GType(typ)))
+}
+

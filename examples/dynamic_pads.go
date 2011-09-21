@@ -13,14 +13,17 @@ func main() {
 	src.SetProperty("do-timestamp", true)
 	src.SetProperty("pattern", 18) // ball
 
-	enc := gst.ElementFactoryMake("vp8enc", "VP8 encoder")
+	//enc := gst.ElementFactoryMake("vp8enc", "VP8 encoder")
+	enc := gst.ElementFactoryMake("x264enc", "H.264 encoder")
 
-	mux := gst.ElementFactoryMake("webmmux", "WebM muxer")
+	//mux := gst.ElementFactoryMake("webmmux", "WebM muxer")
+	mux := gst.ElementFactoryMake("matroskamux", "WebM muxer")
 	mux.SetProperty("streamable", true)
 
 	demux := gst.ElementFactoryMake("matroskademux", "Matroska demuxer")
 
-	dec := gst.ElementFactoryMake("vp8dec", "VP8 dcoder")
+	//dec := gst.ElementFactoryMake("vp8dec", "VP8 dcoder")
+	dec := gst.ElementFactoryMake("ffdec_h264", "H.264 dcoder")
 
 	sink := gst.ElementFactoryMake("autovideosink", "Video display element")
 
@@ -29,6 +32,7 @@ func main() {
 	pl.Add(src, enc, mux, demux, dec, sink)
 
 	src.Link(enc, mux, demux)
+	enc.Link(mux)
 	demux.ConnectNoi("pad-added", cbPadAdded, dec.GetStaticPad("sink"))
 	dec.Link(sink)
 	pl.SetState(gst.STATE_PLAYING)

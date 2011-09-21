@@ -29,15 +29,7 @@ func (c *Caps) RefCount() int {
 }
 
 func (c *Caps) AppendStructure(media_type string, fields glib.Params) {
-	mt := (*C.gchar)(C.CString(media_type))
-	s := C.gst_structure_empty_new(mt)
-	C.free(unsafe.Pointer(mt))
-	for k, v := range fields {
-		n := (*C.gchar)(C.CString(k))
-		C.gst_structure_take_value(s, n, v2g(glib.ValueOf(v)))
-		C.free(unsafe.Pointer(n))
-	}
-	C.gst_caps_append_structure(c.g(), s)
+	C.gst_caps_append_structure(c.g(), makeGstStructure(media_type, fields))
 }
 
 func (c *Caps) GetSize() int {
