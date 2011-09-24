@@ -39,7 +39,7 @@ const (
 	MESSAGE_REQUEST_STATE    = MessageType(C.GST_MESSAGE_REQUEST_STATE)
 	MESSAGE_STEP_START       = MessageType(C.GST_MESSAGE_STEP_START)
 	MESSAGE_QOS              = MessageType(C.GST_MESSAGE_QOS)
-	MESSAGE_PROGRESS         = MessageType(C.GST_MESSAGE_PROGRESS)
+	//MESSAGE_PROGRESS         = MessageType(C.GST_MESSAGE_PROGRESS)
 	MESSAGE_ANY              = MessageType(C.GST_MESSAGE_ANY)
 )
 
@@ -97,8 +97,8 @@ func (t MessageType) String() string {
 		return "MESSAGE_STEP_START"
 	case MESSAGE_QOS:
 		return "MESSAGE_QOS"
-	case MESSAGE_PROGRESS:
-		return "MESSAGE_PROGRESS"
+	//case MESSAGE_PROGRESS:
+	//	return "MESSAGE_PROGRESS"
 	case MESSAGE_ANY:
 		return "MESSAGE_ANY"
 	}
