@@ -5,4 +5,7 @@ should be goinstalable. Try
 
     $ goinstall github.com/ziutek/gst
 
-There is no documentation at this moment but see examples directory.
+#### Documentation
+
+See examples directory and
+[http://gopkgdoc.appspot.com/pkg/github.com/ziutek/gst]
