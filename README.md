@@ -7,5 +7,4 @@ should be goinstalable. Try
 
 #### Documentation
 
-See examples directory and
-[http://gopkgdoc.appspot.com/pkg/github.com/ziutek/gst]
+See examples directory and http://gopkgdoc.appspot.com/pkg/github.com/ziutek/gst
