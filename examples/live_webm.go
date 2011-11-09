@@ -3,14 +3,14 @@
 package main
 
 import (
+	"fmt"
 	"github.com/ziutek/glib"
 	"github.com/ziutek/gst"
-	"http"
-	"fmt"
-	"net"
 	"io"
-	"syscall"
 	"log"
+	"net"
+	"net/http"
+	"syscall"
 )
 
 type Index struct {
@@ -35,8 +35,8 @@ func (ix *Index) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 }
 
 type WebM struct {
-	pl   *gst.Pipeline
-	sink *gst.Element
+	pl    *gst.Pipeline
+	sink  *gst.Element
 	conns map[int]net.Conn
 }
 
@@ -73,8 +73,8 @@ func (wm *WebM) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 	// Send HTTP header
 	_, err = io.WriteString(
 		file,
-		"HTTP/1.1 200 OK\r\n" +
-		"Content-Type: video/webm\r\n\r\n",
+		"HTTP/1.1 200 OK\r\n"+
+			"Content-Type: video/webm\r\n\r\n",
 	)
 	if err != nil {
 		log.Println("io.WriteString:", err)
