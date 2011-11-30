@@ -65,9 +65,9 @@ func (wm *WebM) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 		log.Println("net.TCPConn.File:", err)
 		return
 	}
-	fd, errno := syscall.Dup(file.Fd())
-	if errno != 0 {
-		log.Println("syscall.Dup:", syscall.Errstr(errno))
+	fd, err := syscall.Dup(file.Fd())
+	if err != nil {
+		log.Println("syscall.Dup:", err)
 		return
 	}
 	// Send HTTP header
@@ -93,7 +93,7 @@ func (wm *WebM) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 func (wm *WebM) cbClientFdRemoved(fd int) {
 	wm.conns[fd].Close()
 	syscall.Close(fd)
-	wm.conns[fd] = nil, false
+	delete(wm.conns, fd)
 }
 
 func NewWebM(width, height, fps int) *WebM {
