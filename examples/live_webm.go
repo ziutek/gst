@@ -65,7 +65,7 @@ func (wm *WebM) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 		log.Println("net.TCPConn.File:", err)
 		return
 	}
-	fd, err := syscall.Dup(file.Fd())
+	fd, err := syscall.Dup(int(file.Fd()))
 	if err != nil {
 		log.Println("syscall.Dup:", err)
 		return
