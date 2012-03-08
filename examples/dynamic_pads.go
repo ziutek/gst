@@ -1,11 +1,11 @@
-// This simple test application create live WebM content from test source,
-// decode it and display.
+// This simple test application create live H264 (or WebM - see commented lines)
+// content from test source, decode it and display.
 package main
 
 import (
+	"fmt"
 	"github.com/ziutek/glib"
 	"github.com/ziutek/gst"
-	"fmt"
 )
 
 func main() {
@@ -17,7 +17,7 @@ func main() {
 	enc := gst.ElementFactoryMake("x264enc", "H.264 encoder")
 
 	//mux := gst.ElementFactoryMake("webmmux", "WebM muxer")
-	mux := gst.ElementFactoryMake("matroskamux", "WebM muxer")
+	mux := gst.ElementFactoryMake("matroskamux", "matroskamux muxer")
 	mux.SetProperty("streamable", true)
 
 	demux := gst.ElementFactoryMake("matroskademux", "Matroska demuxer")
@@ -32,7 +32,6 @@ func main() {
 	pl.Add(src, enc, mux, demux, dec, sink)
 
 	src.Link(enc, mux, demux)
-	enc.Link(mux)
 	demux.ConnectNoi("pad-added", cbPadAdded, dec.GetStaticPad("sink"))
 	dec.Link(sink)
 	pl.SetState(gst.STATE_PLAYING)
