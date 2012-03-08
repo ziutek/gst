@@ -1,5 +1,7 @@
 // This simple test application serve live generated WebM content on webpage
 // using HTML5 <video> element.
+// The bitrate is low so you need to wait long for video if you browser has
+// big input buffer.
 package main
 
 import (
