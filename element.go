@@ -7,8 +7,8 @@ package gst
 import "C"
 
 import (
-	"unsafe"
 	"github.com/ziutek/glib"
+	"unsafe"
 )
 
 type State C.GstState
@@ -103,14 +103,13 @@ func (e *Element) SetState(state State) StateChangeReturn {
 	return StateChangeReturn(C.gst_element_set_state(e.g(), C.GstState(state)))
 }
 
-func (e *Element)  GetState(timeout_ns int64) (state, pending State,
-		ret StateChangeReturn) {
+func (e *Element) GetState(timeout_ns int64) (state, pending State,
+	ret StateChangeReturn) {
 	ret = StateChangeReturn(C.gst_element_get_state(
 		e.g(), state.g(), pending.g(), C.GstClockTime(timeout_ns),
 	))
 	return
 }
-
 
 func (e *Element) AddPad(p *Pad) bool {
 	return C.gst_element_add_pad(e.g(), p.g()) != 0
@@ -159,4 +158,18 @@ func ElementFactoryMake(factory_name, name string) *Element {
 	e := new(Element)
 	e.SetPtr(glib.Pointer(C.gst_element_factory_make(fn, n)))
 	return e
+}
+
+func ParseLaunch(pipeline_description string) (*Element, error) {
+	pd := (*C.gchar)(C.CString(pipeline_description))
+	defer C.free(unsafe.Pointer(pd))
+	e := new(Element)
+	var Cerr *C.GError
+	e.SetPtr(glib.Pointer(C.gst_parse_launch(pd, &Cerr)))
+	if Cerr != nil {
+		err := *(*glib.Error)(unsafe.Pointer(Cerr))
+		C.g_error_free(Cerr)
+		return nil, &err
+	}
+	return e, nil
 }
