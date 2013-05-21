@@ -7,8 +7,8 @@ package gst
 import "C"
 
 import (
-	"unsafe"
 	"github.com/ziutek/glib"
+	"unsafe"
 )
 
 type Bin struct {
@@ -47,4 +47,18 @@ func (b *Bin) Remove(els ...*Element) bool {
 		}
 	}
 	return true
+}
+
+// GetByName returns the element with the given name from a bin. Returns nil
+// if no element with the given name is found in the bin.
+func (b *Bin) GetByName(name string) *Element {
+	en := (*C.gchar)(C.CString(name))
+	defer C.free(unsafe.Pointer(en))
+	p := glib.Pointer(C.gst_bin_get_by_name(b.g(), en))
+	if p == nil {
+		return nil
+	}
+	e := new(Element)
+	e.SetPtr(p)
+	return e
 }
