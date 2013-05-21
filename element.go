@@ -159,17 +159,3 @@ func ElementFactoryMake(factory_name, name string) *Element {
 	e.SetPtr(glib.Pointer(C.gst_element_factory_make(fn, n)))
 	return e
 }
-
-func ParseLaunch(pipeline_description string) (*Element, error) {
-	pd := (*C.gchar)(C.CString(pipeline_description))
-	defer C.free(unsafe.Pointer(pd))
-	e := new(Element)
-	var Cerr *C.GError
-	e.SetPtr(glib.Pointer(C.gst_parse_launch(pd, &Cerr)))
-	if Cerr != nil {
-		err := *(*glib.Error)(unsafe.Pointer(Cerr))
-		C.g_error_free(Cerr)
-		return nil, &err
-	}
-	return e, nil
-}
