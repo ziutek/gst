@@ -1,7 +1,12 @@
 package gst
 
 /*
+#include <stdlib.h>
 #include <gst/gst.h>
+
+int capsRefCount(GstCaps *c) {
+	return GST_CAPS_REFCOUNT(c);
+}
 */
 import "C"
 
@@ -25,7 +30,7 @@ func (c *Caps) Unref() {
 }
 
 func (c *Caps) RefCount() int {
-	return int(c.refcount)
+	return int(C.capsRefCount(c.g()))
 }
 
 func (c *Caps) AppendStructure(media_type string, fields glib.Params) {

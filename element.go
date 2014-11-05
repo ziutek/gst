@@ -115,10 +115,10 @@ func (e *Element) AddPad(p *Pad) bool {
 	return C.gst_element_add_pad(e.g(), p.g()) != 0
 }
 
-func (e *Element) GetPad(name string) *Pad {
+func (e *Element) GetRequestPad(name string) *Pad {
 	s := (*C.gchar)(C.CString(name))
 	defer C.free(unsafe.Pointer(s))
-	cp := C.gst_element_get_pad(e.g(), s)
+	cp := C.gst_element_get_request_pad(e.g(), s)
 	if cp == nil {
 		return nil
 	}
@@ -155,7 +155,11 @@ func ElementFactoryMake(factory_name, name string) *Element {
 	defer C.free(unsafe.Pointer(fn))
 	n := (*C.gchar)(C.CString(name))
 	defer C.free(unsafe.Pointer(n))
+	ge := C.gst_element_factory_make(fn, n)
+	if ge == nil {
+		return nil
+	}
 	e := new(Element)
-	e.SetPtr(glib.Pointer(C.gst_element_factory_make(fn, n)))
+	e.SetPtr(glib.Pointer(ge))
 	return e
 }

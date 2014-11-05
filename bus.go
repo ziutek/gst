@@ -81,7 +81,7 @@ func (b *Bus) RemoveSignalWatch() {
 
 func (b *Bus) Poll(events MessageType, timeout int64) *Message {
 	return (*Message)(C.gst_bus_poll(b.g(), C.GstMessageType(events),
-		C.GstClockTimeDiff(timeout)))
+		C.GstClockTime(timeout)))
 }
 
 func NewBus() *Bus {

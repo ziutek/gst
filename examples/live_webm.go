@@ -6,13 +6,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/ziutek/glib"
-	"github.com/ziutek/gst"
 	"io"
 	"log"
 	"net"
 	"net/http"
 	"syscall"
+
+	"github.com/ziutek/glib"
+	"github.com/ziutek/gst"
 )
 
 type Index struct {
@@ -92,10 +93,10 @@ func (wm *WebM) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 }
 
 // Handler for connection closing
-func (wm *WebM) cbClientFdRemoved(fd int) {
-	wm.conns[fd].Close()
-	syscall.Close(fd)
-	delete(wm.conns, fd)
+func (wm *WebM) cbClientFdRemoved(fd uint32) {
+	wm.conns[int(fd)].Close()
+	syscall.Close(int(fd))
+	delete(wm.conns, int(fd))
 }
 
 func NewWebM(width, height, fps int) *WebM {
