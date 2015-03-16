@@ -27,7 +27,7 @@ func main() {
 
 	pl.Add(src, sink)
 	filter := gst.NewCapsSimple(
-		"video/x-raw-yuv",
+		"video/x-raw,format=yuv",
 		glib.Params{
 			"width":     int32(192),
 			"height":    int32(108),

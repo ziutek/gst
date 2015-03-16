@@ -93,7 +93,7 @@ func (wm *WebM) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 }
 
 // Handler for connection closing
-func (wm *WebM) cbClientFdRemoved(fd uint32) {
+func (wm *WebM) cbClientFdRemoved(fd int32) {
 	wm.conns[int(fd)].Close()
 	syscall.Close(int(fd))
 	delete(wm.conns, int(fd))
@@ -121,10 +121,10 @@ func NewWebM(width, height, fps int) *WebM {
 	wm.pl.Add(src, enc, mux, wm.sink)
 
 	filter := gst.NewCapsSimple(
-		"video/x-raw-yuv",
+		"video/x-raw,format=yuv",
 		glib.Params{
-			"width":     width,
-			"height":    height,
+			"width":     int32(width),
+			"height":    int32(height),
 			"framerate": &gst.Fraction{fps, 1},
 		},
 	)
