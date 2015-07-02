@@ -31,8 +31,8 @@ func (b *AppSrc) AsAppSrc() *AppSrc {
 
 
 // =================================
-func NewAppSrc(gsttype string, id string) *AppSrc {
-	return (*AppSrc)(unsafe.Pointer(ElementFactoryMake(gsttype, id)))
+func NewAppSrc( name string) *AppSrc {
+	return (*AppSrc)(unsafe.Pointer(ElementFactoryMake("appsrc",name)))
 }
 
 // =================================
