@@ -7,8 +7,8 @@ package gst
 import "C"
 
 import (
-	"unsafe"
 	"github.com/ziutek/glib"
+	"unsafe"
 )
 
 type MessageType C.GstMessageType
@@ -41,7 +41,7 @@ const (
 	MESSAGE_STEP_START       = MessageType(C.GST_MESSAGE_STEP_START)
 	MESSAGE_QOS              = MessageType(C.GST_MESSAGE_QOS)
 	//MESSAGE_PROGRESS         = MessageType(C.GST_MESSAGE_PROGRESS)
-	MESSAGE_ANY              = MessageType(C.GST_MESSAGE_ANY)
+	MESSAGE_ANY = MessageType(C.GST_MESSAGE_ANY)
 )
 
 func (t MessageType) String() string {
@@ -144,7 +144,7 @@ func (m *Message) GetSrc() *GstObj {
 
 func (m *Message) ParseError() (err *glib.Error, debug string) {
 	var d *C.gchar
-	var	e, ret_e *C.GError
+	var e, ret_e *C.GError
 
 	C.gst_message_parse_error(m.g(), &e, &d)
 	defer C.free(unsafe.Pointer(e))

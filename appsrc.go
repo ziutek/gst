@@ -10,7 +10,7 @@ package gst
 import "C"
 
 import (
-//	"github.com/ziutek/glib"
+	//	"github.com/ziutek/glib"
 	"unsafe"
 )
 
@@ -29,10 +29,9 @@ func (b *AppSrc) AsAppSrc() *AppSrc {
 	return b
 }
 
-
 // =================================
-func NewAppSrc( name string) *AppSrc {
-	return (*AppSrc)(unsafe.Pointer(ElementFactoryMake("appsrc",name)))
+func NewAppSrc(name string) *AppSrc {
+	return (*AppSrc)(unsafe.Pointer(ElementFactoryMake("appsrc", name)))
 }
 
 // =================================
@@ -48,6 +47,6 @@ func (b *AppSrc) EndOfStream() int {
 
 // =================================
 // void             gst_app_src_set_caps                (GstAppSrc *appsrc, const GstCaps *caps);
-func (b *AppSrc) SetCaps( caps *Caps ) {
-    C.gst_app_src_set_caps((*C.GstAppSrc)(b.g()),(*C.GstCaps)(caps))
+func (b *AppSrc) SetCaps(caps *Caps) {
+	C.gst_app_src_set_caps((*C.GstAppSrc)(b.g()), (*C.GstCaps)(caps))
 }

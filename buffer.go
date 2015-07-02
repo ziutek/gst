@@ -7,7 +7,7 @@ package gst
 import "C"
 
 import (
-//	"github.com/ziutek/glib"
+	//	"github.com/ziutek/glib"
 	"unsafe"
 )
 
@@ -44,12 +44,11 @@ func NewBuffer() *Buffer {
 
 // =================================
 //GstBuffer * gst_buffer_new_allocate        (GstAllocator * allocator, gsize size,  GstAllocationParams * params);
-func NewBufferAllocate( size uint ) *Buffer {
+func NewBufferAllocate(size uint) *Buffer {
 	buffer := new(Buffer)
 	buffer.GstBuffer = (*GstBufferStruct)(C.gst_buffer_new_allocate(nil, C.gsize(size), nil))
 	return buffer
 }
-
 
 // =================================
 //gsize       gst_buffer_get_size            (GstBuffer *buffer);
@@ -71,10 +70,9 @@ func (this *Buffer) MemSet(offset uint, val byte, size uint) int {
 
 // =================================
 //  gsize       gst_buffer_fill                (GstBuffer *buffer, gsize offset, gconstpointer src, gsize size);
-func (this *Buffer) Fill( offset uint, src unsafe.Pointer, size uint ) (int) {
-    return (int)(C.gst_buffer_fill((*C.GstBuffer)(this.GstBuffer), C.gsize(offset), C.gconstpointer(src), C.gsize(size)))
+func (this *Buffer) Fill(offset uint, src unsafe.Pointer, size uint) int {
+	return (int)(C.gst_buffer_fill((*C.GstBuffer)(this.GstBuffer), C.gsize(offset), C.gconstpointer(src), C.gsize(size)))
 }
-
 
 // =================================
 func (this *Buffer) Unref() {
