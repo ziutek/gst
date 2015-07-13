@@ -159,6 +159,11 @@ func init() {
 	TYPE_FRACTION = glib.Type(C.gst_fraction_get_type())
 }
 
+func GetVersion() (int, int, int, int) {
+	var major,minor,micro,nano C.guint
+	C.gst_version(&major, &minor, &micro, &nano)
+	return int(major), int(minor), int(micro), int(nano)
+}
 
 func makeGstStructure(name string, fields glib.Params) *C.GstStructure {
 	nm := (*C.gchar)(C.CString(name))
