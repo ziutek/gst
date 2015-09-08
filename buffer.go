@@ -3,6 +3,35 @@ package gst
 /*
 #include <stdlib.h>
 #include <gst/gstbuffer.h>
+
+// ----------------------------
+// DTS
+void _golang_gst_set_dts( GstBuffer *buffer, guint64 value ) {
+  GST_BUFFER_DTS(buffer) = value;
+}
+
+// ----------------------------
+// PTS
+void _golang_gst_set_pts( GstBuffer *buffer, guint64 value ) {
+  GST_BUFFER_PTS(buffer) = value;
+}
+
+// ----------------------------
+// Duration
+void _golang_gst_set_duration( GstBuffer *buffer, guint64 value ) {
+  GST_BUFFER_DURATION(buffer) = value;
+}
+
+
+// ----------------------------
+// Offset / OffsetEnd
+void _golang_gst_set_offset( GstBuffer *buffer, guint64 value ) {
+  GST_BUFFER_OFFSET(buffer) = value;
+}
+void _golang_gst_set_offset_end( GstBuffer *buffer, guint64 value ) {
+  GST_BUFFER_OFFSET_END(buffer) = value;
+}
+
 */
 import "C"
 
@@ -72,6 +101,31 @@ func (this *Buffer) MemSet(offset uint, val byte, size uint) int {
 //  gsize       gst_buffer_fill                (GstBuffer *buffer, gsize offset, gconstpointer src, gsize size);
 func (this *Buffer) Fill(offset uint, src unsafe.Pointer, size uint) int {
 	return (int)(C.gst_buffer_fill((*C.GstBuffer)(this.GstBuffer), C.gsize(offset), C.gconstpointer(src), C.gsize(size)))
+}
+
+// =================================
+func (this *Buffer) SetDTS(value uint64) {
+	C._golang_gst_set_dts((*C.GstBuffer)(this.GstBuffer), C.guint64(value))
+}
+
+// =================================
+func (this *Buffer) SetPTS(value uint64) {
+	C._golang_gst_set_pts((*C.GstBuffer)(this.GstBuffer), C.guint64(value))
+}
+
+// =================================
+func (this *Buffer) SetDuration(value uint64) {
+	C._golang_gst_set_duration((*C.GstBuffer)(this.GstBuffer), C.guint64(value))
+}
+
+// =================================
+func (this *Buffer) SetOffset(value uint64) {
+	C._golang_gst_set_offset((*C.GstBuffer)(this.GstBuffer), C.guint64(value))
+}
+
+// =================================
+func (this *Buffer) SetOffsetEnd(value uint64) {
+	C._golang_gst_set_offset_end((*C.GstBuffer)(this.GstBuffer), C.guint64(value))
 }
 
 // =================================
