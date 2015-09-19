@@ -47,6 +47,28 @@ import (
 	"github.com/ziutek/glib"
 )
 
+// returns (uri, gerror)
+func FilenameToURI(filename string) (string, error) {
+	var Cerr *C.GError
+	Cfilename := (*C.gchar)(C.CString(filename))
+	uri := (*C.char)(C.gst_filename_to_uri(Cfilename, &Cerr))
+
+	if Cerr != nil {
+		err := *(*glib.Error)(unsafe.Pointer(Cerr))
+		C.g_error_free(Cerr)
+		return "", &err
+	}
+	if uri == nil {
+		return "", nil // shouldn't ever happen?
+	}
+
+	// make go string
+	defer C.g_free(C.gpointer(uri))
+	Guri := C.GoString(uri)
+
+	return Guri, nil
+}
+
 func v2g(v *glib.Value) *C.GValue {
 	return (*C.GValue)(unsafe.Pointer(v))
 }
