@@ -7,6 +7,7 @@ package gst
 import "C"
 
 import (
+	"errors"
 	"github.com/ziutek/glib"
 	"unsafe"
 )
@@ -61,4 +62,26 @@ func (b *Bin) GetByName(name string) *Element {
 	e := new(Element)
 	e.SetPtr(p)
 	return e
+}
+
+// Similar to gst_parse_launch, but makes a bin instead of a pipeline
+func ParseBinFromDescription(desc string) (*Bin, error) {
+	en := (*C.gchar)(C.CString(desc))
+	defer C.free(unsafe.Pointer(en))
+
+	ghost_unlinked_pads := C.gboolean(1) // probably should be true? http://gstreamer.freedesktop.org/data/doc/gstreamer/head/gstreamer/html/gstreamer-GstParse.html#gst-parse-bin-from-description
+	var Cerr *C.GError
+	p := glib.Pointer(C.gst_parse_bin_from_description(en, ghost_unlinked_pads, &Cerr))
+	if Cerr != nil {
+		errStr := (*glib.Error)(unsafe.Pointer(Cerr)).Error()
+		C.g_error_free(Cerr)
+		return nil, errors.New(errStr)
+	}
+	if p == nil {
+		return nil, nil
+	}
+	b := new(Bin)
+	b.SetPtr(p)
+
+	return b, nil
 }

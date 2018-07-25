@@ -147,7 +147,7 @@ func (m *Message) ParseError() (err *glib.Error, debug string) {
 	var	e, ret_e *C.GError
 
 	C.gst_message_parse_error(m.g(), &e, &d)
-	defer C.free(unsafe.Pointer(e))
+	defer C.g_error_free(e)
 	defer C.free(unsafe.Pointer(d))
 
 	debug = C.GoString((*C.char)(d))

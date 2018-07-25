@@ -47,6 +47,28 @@ import (
 	"github.com/ziutek/glib"
 )
 
+// returns (uri, gerror)
+func FilenameToURI(filename string) (string, error) {
+	var Cerr *C.GError
+	Cfilename := (*C.gchar)(C.CString(filename))
+	uri := (*C.char)(C.gst_filename_to_uri(Cfilename, &Cerr))
+
+	if Cerr != nil {
+		err := *(*glib.Error)(unsafe.Pointer(Cerr))
+		C.g_error_free(Cerr)
+		return "", &err
+	}
+	if uri == nil {
+		return "", nil // shouldn't ever happen?
+	}
+
+	// make go string
+	defer C.g_free(C.gpointer(uri))
+	Guri := C.GoString(uri)
+
+	return Guri, nil
+}
+
 func v2g(v *glib.Value) *C.GValue {
 	return (*C.GValue)(unsafe.Pointer(v))
 }
@@ -159,6 +181,11 @@ func init() {
 	TYPE_FRACTION = glib.Type(C.gst_fraction_get_type())
 }
 
+func GetVersion() (int, int, int, int) {
+	var major,minor,micro,nano C.guint
+	C.gst_version(&major, &minor, &micro, &nano)
+	return int(major), int(minor), int(micro), int(nano)
+}
 
 func makeGstStructure(name string, fields glib.Params) *C.GstStructure {
 	nm := (*C.gchar)(C.CString(name))
