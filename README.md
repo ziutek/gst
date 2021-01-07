@@ -1,3 +1,5 @@
+Retired. I don't use/develop this package anymore.
+
 ### Go bindings for GStreamer at a very early stage of maturity.
 
 This package is based on [GLib bindings](https://github.com/ziutek/glib). It
